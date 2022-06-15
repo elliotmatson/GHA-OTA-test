@@ -9,6 +9,7 @@
 
 unsigned long getUptimeSeconds();
 void firmwareUpdate();
+void checkForUpdates(void * parameter);
 
 void setup() {
   Serial.begin(115200);
@@ -29,25 +30,41 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   pinMode(2, OUTPUT);
+
+  xTaskCreate(
+    checkForUpdates,    // Function that should be called
+    "Check For Updates",   // Name of the task (for debugging)
+    1000,            // Stack size (bytes)
+    NULL,            // Parameter to pass
+    0,               // Task priority
+    NULL             // Task handle
+  );
 }
 
 void loop() {
-  firmwareUpdate();
+  //firmwareUpdate();
   digitalWrite(2, HIGH);
   delay(100);
   digitalWrite(2, LOW);
   delay(100);
 }
 
+void checkForUpdates(void * parameter){
+  for(;;){
+    firmwareUpdate();
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+  }
+}
+
 void firmwareUpdate()
 {
 #ifdef VERSION
-    static unsigned long lastFirmwareCheck = 0;
+    /*static unsigned long lastFirmwareCheck = 0;
     unsigned long uptime = getUptimeSeconds();
     if (uptime - lastFirmwareCheck < CHECK_FOR_UPDATES_INTERVAL)
         return;
 
-    lastFirmwareCheck = uptime;
+    lastFirmwareCheck = uptime;*/
 
     HTTPClient http;
     WiFiClientSecure client;
