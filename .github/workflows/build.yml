@@ -40,6 +40,10 @@ jobs:
         pip install --upgrade platformio
         pio platform update
         # pio run -t clean
+
+    - name: Set version var
+      run: echo "PLATFORMIO_BUILD_FLAGS=-DVERSION='\"${GITHUB_REF#refs/*/}\"'" >> $GITHUB_ENV
+      if: startsWith(github.ref, 'refs/tags/v')
         
     - name: Run PlatformIO
       run: pio run -e denky32

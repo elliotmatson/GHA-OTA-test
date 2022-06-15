@@ -6,7 +6,6 @@
 #include <HTTPUpdate.h>
 
 #define CHECK_FOR_UPDATES_INTERVAL 5
-#define VERSION "0.0.4"
 
 unsigned long getUptimeSeconds();
 void firmwareUpdate();
@@ -81,6 +80,7 @@ void loop() {
 
 void firmwareUpdate()
 {
+#ifdef VERSION
     static unsigned long lastFirmwareCheck = 0;
     unsigned long uptime = getUptimeSeconds();
     if (uptime - lastFirmwareCheck < CHECK_FOR_UPDATES_INTERVAL)
@@ -125,6 +125,7 @@ void firmwareUpdate()
         Serial.printf("Update OK!\n");
         break;
     }
+#endif
 }
 
 unsigned long getUptimeSeconds()
