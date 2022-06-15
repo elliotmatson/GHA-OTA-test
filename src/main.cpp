@@ -6,7 +6,7 @@
 #include <HTTPUpdate.h>
 
 #define CHECK_FOR_UPDATES_INTERVAL 5
-#define VERSION "0.0.3"
+#define VERSION "0.0.4"
 
 unsigned long getUptimeSeconds();
 void firmwareUpdate();
@@ -66,11 +66,17 @@ void setup() {
   Serial.println("Ready");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+
+  pinMode(2, OUTPUT);
 }
 
 void loop() {
   ArduinoOTA.handle();
   firmwareUpdate();
+  digitalWrite(2, HIGH);
+  delay(100);
+  digitalWrite(2, LOW);
+  delay(100);
 }
 
 void firmwareUpdate()
