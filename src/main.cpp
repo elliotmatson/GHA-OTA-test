@@ -6,10 +6,16 @@
 #include <HTTPUpdate.h>
 
 #define CHECK_FOR_UPDATES_INTERVAL 5
+#ifndef VERSION
+  #define VERSION "0.0.7"
+#endif
 
 unsigned long getUptimeSeconds();
 void firmwareUpdate();
 void checkForUpdates(void * parameter);
+
+TaskHandle_t checkForUpdatesTask = NULL;
+
 
 void setup() {
   Serial.begin(115200);
@@ -34,15 +40,14 @@ void setup() {
   xTaskCreate(
     checkForUpdates,    // Function that should be called
     "Check For Updates",   // Name of the task (for debugging)
-    1000,            // Stack size (bytes)
+    6000,            // Stack size (bytes)
     NULL,            // Parameter to pass
     0,               // Task priority
-    NULL             // Task handle
+    &checkForUpdatesTask             // Task handle
   );
 }
 
 void loop() {
-  //firmwareUpdate();
   digitalWrite(2, HIGH);
   delay(100);
   digitalWrite(2, LOW);
@@ -52,20 +57,13 @@ void loop() {
 void checkForUpdates(void * parameter){
   for(;;){
     firmwareUpdate();
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    vTaskDelay((CHECK_FOR_UPDATES_INTERVAL*1000) / portTICK_PERIOD_MS);
   }
 }
 
 void firmwareUpdate()
 {
 #ifdef VERSION
-    /*static unsigned long lastFirmwareCheck = 0;
-    unsigned long uptime = getUptimeSeconds();
-    if (uptime - lastFirmwareCheck < CHECK_FOR_UPDATES_INTERVAL)
-        return;
-
-    lastFirmwareCheck = uptime;*/
-
     HTTPClient http;
     WiFiClientSecure client;
     client.setInsecure();
