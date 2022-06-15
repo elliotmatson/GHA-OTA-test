@@ -6,7 +6,7 @@
 #include <HTTPUpdate.h>
 
 #define CHECK_FOR_UPDATES_INTERVAL 5
-#define VERSION "0.0.0"
+#define VERSION "0.0.2"
 
 unsigned long getUptimeSeconds();
 void firmwareUpdate();
