@@ -43,7 +43,7 @@ jobs:
 
     - name: Set version var
       run: echo "PLATFORMIO_BUILD_FLAGS=-DVERSION='\"${GITHUB_REF#refs/*/}\"' -DREPO_PATH='\"$GITHUB_REPOSITORY\"'" >> $GITHUB_ENV
-      # if: startsWith(github.ref, 'refs/tags/v')
+      if: startsWith(github.ref, 'refs/tags/v')
       
     - name: Run PlatformIO
       run: pio run -e denky32
@@ -63,7 +63,3 @@ jobs:
       uses: kittaakos/upload-artifact-as-is@v0
       with:
         path: ./*.bin
-        
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      timeout-minutes: 5
