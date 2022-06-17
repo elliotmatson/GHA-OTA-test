@@ -11,7 +11,7 @@
 #endif
 
 #ifndef REPO_URL
-  #define REPO_URL "rrr"
+  #define REPO_URL "elliotmatson/GHA-OTA-test"
 #endif
 
 unsigned long getUptimeSeconds();
@@ -73,6 +73,8 @@ void firmwareUpdate()
     client.setInsecure();
 
     String firmwareUrl = String("https://github.com/") + REPO_URL + String("/releases/latest/download/esp32.bin");
+    Serial.println(firmwareUrl);
+    
     if (!http.begin(client, firmwareUrl))
         return;
 
