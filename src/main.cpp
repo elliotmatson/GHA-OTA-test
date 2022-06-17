@@ -10,6 +10,10 @@
   #define VERSION "0.0.7"
 #endif
 
+#ifndef REPO_URL
+  #define REPO_URL "rrr"
+#endif
+
 unsigned long getUptimeSeconds();
 void firmwareUpdate();
 void checkForUpdates(void * parameter);
@@ -68,7 +72,7 @@ void firmwareUpdate()
     WiFiClientSecure client;
     client.setInsecure();
 
-    String firmwareUrl = "https://github.com/elliotmatson/GHA-OTA-test/releases/latest/download/esp32.bin";
+    String firmwareUrl = String("https://github.com/") + REPO_URL + String("/releases/latest/download/esp32.bin");
     if (!http.begin(client, firmwareUrl))
         return;
 
